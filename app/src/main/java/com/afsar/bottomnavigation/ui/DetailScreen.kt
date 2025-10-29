@@ -1,9 +1,18 @@
 package com.afsar.bottomnavigation.ui
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Save
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -17,13 +26,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.afsar.bottomnavigation.data.ToDo
 import com.afsar.bottomnavigation.ui.viewmodel.ToDoViewModel
 import com.afsar.bottomnavigation.utility.ViewModelFactory
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(navController: NavController, todo: ToDo?) {
+fun DetailScreen(onBackClicked: () -> Unit,
+                 todo: ToDo?) {
     val context = LocalContext.current
     val toDoViewModel: ToDoViewModel = viewModel(
         factory = ViewModelFactory((context.applicationContext as ToDoApplication).repository)
@@ -37,25 +47,23 @@ fun DetailScreen(navController: NavController, todo: ToDo?) {
     var editedTitle by remember(liveTodo) { mutableStateOf(liveTodo?.title ?: "") }
     var editedDesc by remember(liveTodo) { mutableStateOf(liveTodo?.description ?: "") }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Button(
-                onClick = { navController.navigateUp() },
-                modifier = Modifier.height(36.dp)
-            ) {
-                Text("← Back")
-            }
-
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Detail Tugas") },
+                navigationIcon = {
+                    IconButton(onClick = onBackClicked) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Kembali"
+                        )
+                    }
+                }
+            )
+        },
+        floatingActionButton = {
             if (liveTodo != null) {
-                Button(
+                FloatingActionButton(
                     onClick = {
                         if (isInEditMode) {
                             val updatedTodo = liveTodo!!.copy(
@@ -67,45 +75,59 @@ fun DetailScreen(navController: NavController, todo: ToDo?) {
                         } else {
                             isInEditMode = true
                         }
-                    },
-                    modifier = Modifier.height(36.dp)
+                    }
                 ) {
-                    Text(if (isInEditMode) "Simpan" else "Edit")
+                    Icon(
+                        imageVector = if (isInEditMode) Icons.Default.Save else Icons.Default.Edit,
+                        contentDescription = if (isInEditMode) "Simpan" else "Edit"
+                    )
                 }
             }
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
+    ) { innerPadding ->
         if (liveTodo != null) {
-            if (isInEditMode) {
-                OutlinedTextField(
-                    value = editedTitle,
-                    onValueChange = { editedTitle = it },
-                    label = { Text("Judul Tugas") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                OutlinedTextField(
-                    value = editedDesc,
-                    onValueChange = { editedDesc = it },
-                    label = { Text("Deskripsi") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-            } else {
-                Text(
-                    text = liveTodo!!.title,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = liveTodo!!.description)
-            }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(innerPadding)
+                    .padding(16.dp),
+            ) {
+                if (isInEditMode) {
+                    OutlinedTextField(
+                        value = editedTitle,
+                        onValueChange = { editedTitle = it },
+                        label = { Text("Judul Tugas") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = editedDesc,
+                        onValueChange = { editedDesc = it },
+                        label = { Text("Deskripsi") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                } else {
+                    Text(
+                        text = liveTodo!!.title,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = liveTodo!!.description)
+                }
 
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "Status: ${if (liveTodo!!.isCompleted) "Selesai" else "Belum Selesai"}") // Baca dari liveTodo
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = "Status: ${if (liveTodo!!.isCompleted) "Selesai" else "Belum Selesai"}")
+            }
         } else {
-            Text(text = "Data ToDo tidak ditemukan.")
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = "Data ToDo tidak ditemukan.")
+            }
         }
     }
 }

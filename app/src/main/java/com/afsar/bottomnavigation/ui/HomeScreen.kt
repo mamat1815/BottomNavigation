@@ -10,13 +10,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.afsar.bottomnavigation.data.ToDo
 import com.afsar.bottomnavigation.ui.viewmodel.ToDoViewModel
 import com.afsar.bottomnavigation.utility.ViewModelFactory
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen() {
     val context = LocalContext.current
     val toDoViewModel: ToDoViewModel = viewModel(
         factory = ViewModelFactory((context.applicationContext as ToDoApplication).repository)
@@ -33,7 +32,10 @@ fun HomeScreen(navController: NavController) {
         items(todoList) { todo ->
             ToDoItemCard(
                 todo = todo,
-                onClick = { navController.navigate(Screen.Detail.createRoute(todo)) },
+                onClick = {
+                    val intent = DetailActivity.newIntent(context, todo)
+                    context.startActivity(intent)
+                          },
                 onDelete = { toDoViewModel.deleteTodo(todo) },
                 onToggleComplete = {
                     toDoViewModel.updateTodo(todo.copy(isCompleted = !todo.isCompleted))
