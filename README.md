@@ -17,7 +17,7 @@ Aplikasi daftar tugas (ToDo) sederhana yang dibuat menggunakan Jetpack Compose. 
 
 | Layar Utama | Layar Tambah | Layar Detail | Layar Edit |
 | :---: | :---: | :---: |:---: |
-| ![Placeholder Layar Utama](https://placehold.co/300x600/3DDC84/ffffff?text=Tempelkan+Screenshot+HomeScreen.kt) | ![Placeholder Layar Tambah](https://placehold.co/300x600/3DDC84/ffffff?text=Tempelkan+Screenshot+ListScreen.kt) | ![Placeholder Layar Detail](https://placehold.co/300x600/3DDC84/ffffff?text=Tempelkan+Screenshot+DetailScreen.kt) |![Placeholder Layar Detail](https://placehold.co/300x600/3DDC84/ffffff?text=Tempelkan+Screenshot+DetailScreen.kt) |
+| ![Placeholder Layar Utama](https://github.com/mamat1815/BottomNavigation/blob/master/Home.jpg) | ![Placeholder Layar Tambah](https://github.com/mamat1815/BottomNavigation/blob/master/Add.jpg) | ![Placeholder Layar Detail](https://github.com/mamat1815/BottomNavigation/blob/master/Edit.jpg) |![Placeholder Layar Detail](https://github.com/mamat1815/BottomNavigation/blob/master/Detail.jpg) |
 
 ---
 
