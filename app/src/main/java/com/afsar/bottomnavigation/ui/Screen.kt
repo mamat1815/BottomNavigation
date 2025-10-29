@@ -1,5 +1,6 @@
 package com.afsar.bottomnavigation.ui
 
+import android.util.Log
 import com.afsar.bottomnavigation.data.ToDo
 import com.google.gson.Gson
 
@@ -12,6 +13,9 @@ sealed class Screen(val route: String) {
         fun createRoute(todo: ToDo): String {
             val todoJson = Gson().toJson(todo)
             val encodedJson = java.net.URLEncoder.encode(todoJson, "UTF-8")
+            Log.d(
+                "Update", encodedJson
+            )
             return "detail?todo=$encodedJson"
         }
     }

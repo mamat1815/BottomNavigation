@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.afsar.bottomnavigation.data.ToDo
 import com.afsar.bottomnavigation.data.local.ToDoRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -18,11 +19,16 @@ class ToDoViewModel(private val repository: ToDoRepository) : ViewModel() {
         initialValue = emptyList()
     )
 
-
     fun addTodo(title: String, description: String) {
         viewModelScope.launch {
             val newTodo = ToDo(title = title, description = description)
             repository.insert(newTodo)
+        }
+    }
+
+    fun updateTodo(todo: ToDo) {
+        viewModelScope.launch {
+            repository.update(todo)
         }
     }
 
@@ -32,5 +38,7 @@ class ToDoViewModel(private val repository: ToDoRepository) : ViewModel() {
         }
     }
 
-    fun updateTodo(copy: com.afsar.bottomnavigation.data.ToDo) {}
+    fun getTodoById(id: Long): Flow<ToDo?> {
+        return repository.getTodoById(id)
+    }
 }
