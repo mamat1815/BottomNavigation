@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.afsar.bottomnavigation.data.ToDo
 import kotlinx.coroutines.flow.Flow
 
@@ -23,6 +24,8 @@ interface ToDoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(todo: ToDo)
 
+    @Update
+    suspend fun update(todo: ToDo)
 
     @Delete
     suspend fun delete(todo: ToDo)
