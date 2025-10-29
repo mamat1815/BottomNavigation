@@ -43,8 +43,6 @@ fun ListScreen(navController: NavController) {
         factory = ViewModelFactory((context.applicationContext as ToDoApplication).repository)
     )
 
-    val todoList by toDoViewModel.allTodos.collectAsState()
-
     var newTitle by remember { mutableStateOf("") }
     var newDesc by remember { mutableStateOf("") }
 
@@ -73,38 +71,12 @@ fun ListScreen(navController: NavController) {
                     toDoViewModel.addTodo(newTitle, newDesc)
                     newTitle = ""
                     newDesc = ""
+                    navController.navigate(Screen.Home.route) // langsung pindah ke Home
                 }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Tambah Tugas")
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(todoList) { todo ->
-                ToDoItemCard(todo = todo) {
-                    val route = Screen.Detail.createRoute(todo)
-                    navController.navigate(route)
-                }
-            }
-        }
-    }
-}
-@Composable
-fun ToDoItemCard(todo: ToDo, onClick: () -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable { onClick() }
-    ) {
-        Text(
-            text = todo.title,
-            modifier = Modifier.padding(16.dp)
-        )
     }
 }

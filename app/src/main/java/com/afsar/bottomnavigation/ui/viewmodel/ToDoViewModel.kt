@@ -31,4 +31,6 @@ class ToDoViewModel(private val repository: ToDoRepository) : ViewModel() {
             repository.delete(todo)
         }
     }
+
+    fun updateTodo(copy: com.afsar.bottomnavigation.data.ToDo) {}
 }
